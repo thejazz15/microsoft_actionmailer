@@ -26,7 +26,7 @@ module MicrosoftActionmailer
         access_token,
         mail.subject,
         mail.body.encoded,
-        mail.to.first
+        mail.to
       )
 
       before_send = delivery_options[:before_send]

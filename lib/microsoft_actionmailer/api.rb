@@ -1,7 +1,13 @@
 module MicrosoftActionmailer
   module Api
     # Creates a message and saves in 'Draft' mailFolder
-    def ms_create_message(token, subject, content, address)
+    def ms_create_message(token, subject, content, addresses)
+      recipients = []
+      addresses.each do |address|
+        data = { "emailAddress": { "address": address } }
+        recipients << data
+      end
+
       query = {
         "subject": subject,
         "importance": "Normal",
@@ -9,13 +15,7 @@ module MicrosoftActionmailer
           "contentType": "HTML",
           "content": content
         },
-        "toRecipients": [
-          {
-            "emailAddress": {
-              "address": address
-            }
-          }
-        ]
+        "toRecipients": recipients,
       }
       create_message_url = '/v1.0/me/messages'
       req_method = 'post'
