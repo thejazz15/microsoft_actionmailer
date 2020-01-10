@@ -34,7 +34,7 @@ module MicrosoftActionmailer
         before_send.call(mail, message)
       end
 
-      res = ms_send_message(access_token, message['id'])
+      ms_send_message(access_token, message['id'])
 
       after_send = delivery_options[:after_send]
       if after_send && after_send.respond_to?(:call)
