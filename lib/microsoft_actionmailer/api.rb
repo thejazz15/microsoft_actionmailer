@@ -1,7 +1,18 @@
 module MicrosoftActionmailer
   module Api
     # Creates a message and saves in 'Draft' mailFolder
-    def ms_create_message(token, subject, content, addresses)
+    def ms_create_message(token, subject, content, addresses, attachments)
+
+      attachment_list = []
+      attachments.each do |attachment|
+        data = { "@odata.type": "#microsoft.graph.fileAttachment",
+                 "name": attachment.filename,
+                 "contentType": attachment.content_type,
+                 "contentBytes": Base64.encode64(attachment.body.raw_source)
+               }
+        attachment_list << data
+      end
+
       recipients = []
       addresses.each do |address|
         data = { "emailAddress": { "address": address } }
@@ -16,6 +27,7 @@ module MicrosoftActionmailer
           "content": content
         },
         "toRecipients": recipients,
+        "attachments": attachment_list
       }
       create_message_url = '/v1.0/me/messages'
       req_method = 'post'
