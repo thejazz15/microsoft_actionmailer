@@ -33,6 +33,8 @@ module MicrosoftActionmailer
         mail.subject,
         body,
         mail.to,
+        mail.cc,
+        mail.bcc,
         mail.attachments
       )
 
