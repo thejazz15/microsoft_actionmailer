@@ -23,13 +23,13 @@ module MicrosoftActionmailer
       cc_addresses.each do |address|
         data = { "emailAddress": { "address": address } }
         cc_recipients << data
-      end
+      end if cc_addresses.present?
 
       bcc_recipients = []
       bcc_addresses.each do |address|
         data = { "emailAddress": { "address": address } }
         bcc_recipients << data
-      end
+      end if bcc_addresses.present?
 
       query = {
         "subject": subject,
