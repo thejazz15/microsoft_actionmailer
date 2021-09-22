@@ -22,11 +22,20 @@ module MicrosoftActionmailer
     end
 
     def deliver! mail
+      if mail.html_part.present?
+        body = mail.html_part.body.encoded
+      else
+        body = mail.body.encoded
+      end
+
       message = ms_create_message(
         access_token,
         mail.subject,
-        mail.body.encoded,
-        mail.to.first
+        body,
+        mail.to,
+        mail.cc,
+        mail.bcc,
+        mail.attachments
       )
 
       before_send = delivery_options[:before_send]
@@ -34,7 +43,7 @@ module MicrosoftActionmailer
         before_send.call(mail, message)
       end
 
-      res = ms_send_message(access_token, message['id'])
+      ms_send_message(access_token, message['id'])
 
       after_send = delivery_options[:after_send]
       if after_send && after_send.respond_to?(:call)
